@@ -10,6 +10,10 @@ const PurchaseSchema = z.object({
     total: z
         .number()
         .positive({ message: 'Total must be greater than zero'}),
+    status: z
+        .string()
+        .enum(['finished', 'canceled'])
+        .optional()
 });
 
 const validatePurchase = (data) => {
@@ -26,3 +30,4 @@ const validatePurchase = (data) => {
     }
 }
 
+module.exports = { validatePurchase }
