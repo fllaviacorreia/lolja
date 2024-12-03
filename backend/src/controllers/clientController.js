@@ -66,8 +66,34 @@ const updateClient = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 }
+
+const findAllClients = async (req, res) => {
+    try {
+        const clients = await ClientRepository.findAll();
+        res.status(200).json(clients);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
+const findById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (isNaN(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid id'});
+        }
+
+        const client = await ClientRepository.findById(id);
+        res.status(200).json(client);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
 module.exports = {
     register,
     disable,
-    updateClient
+    updateClient,
+    findAllClients,
+    findById
 }
