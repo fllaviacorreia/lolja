@@ -3,6 +3,6 @@ const express = require("express");
 const ClientController = require("../controllers/clientController");
 const ClientRouter = express.Router();
 
-ClientRouter.post("/register", ClientController.create);
-ClientRouter.delete("/disable/:id", ClientController.innactive);
+ClientRouter.post("/register", ClientController.register);
+ClientRouter.delete("/disable/:id", ClientController.disable);
 module.exports = ClientRouter;
