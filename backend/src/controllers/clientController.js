@@ -35,7 +35,19 @@ const create = async (req, res) => {
     }
 }
 
-
+const disable = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (isNaN(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid id'});
+        }
+        const innactiveClient = await ClientRepository.innactive(id);
+        res.status(200).json(innactiveClient);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
 module.exports = {
     create,
+    disable
 }
