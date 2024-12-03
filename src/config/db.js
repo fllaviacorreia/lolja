@@ -19,9 +19,7 @@ async function connectDB() {
             connectionTimeoutMillis: 3000,
         })
 
-        pool.on('connect', (client) => {
-            console.log('A conexão com o banco de dados foi estabelecida com sucesso.');
-        })
+        pool.on('connect', (client) => {})
 
         return pool;
     } catch (error) {
