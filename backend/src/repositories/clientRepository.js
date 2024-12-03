@@ -66,7 +66,7 @@ class ClientRepository {
                 UPDATE clients 
                 SET name = $1, email = $2
                 WHERE id = $3
-                RETURNING *;
+                
             `;
             const result = await db.query(query, [
                 validatedClient.data.name, 
@@ -77,6 +77,38 @@ class ClientRepository {
             return result.rows[0];
         } catch (error) {
             console.error('Error in the update client function:', error.message);
+            throw error;
+        }
+    }
+
+    static async findAll() {
+        const db = await connectDB();
+        try {
+            const query = `
+                SELECT * 
+                FROM clients
+            `;
+            const result = await db.query(query);
+            return result.rows;
+        } catch (error) {
+            console.error('Error in the find all client function:', error.message);
+            throw error;
+        }
+    }
+
+    static async findById(id) {
+        const db = await connectDB();
+        try {
+            const query = `
+                SELECT * FROM clients
+                WHERE id = $1;      
+            `;
+            const result = await db.query(query, [id]);
+
+            if (result.rowCount === 0) throw new Error('Client not found');
+            return result.rows[0];
+        } catch (error) {
+            console.error('Error finding client with this id:', error.message);
             throw error;
         }
     }
