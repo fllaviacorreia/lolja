@@ -1,8 +1,9 @@
-const { z, isValid } = require("zod");
+const { z } = require("zod");
 
 const ClientSchema = z.object({
     name: z
-        .string().min(1, {message: 'Name is required'})
+        .string()
+        .min(1, {message: 'Name is required'})
         .max(50, { message: 'The name must have a maximum of 50 characters'}),
     email: z
         .string()
@@ -13,7 +14,7 @@ const ClientSchema = z.object({
         .date()
         .refine((date) => {
             const eigthteenAgo = new Date();
-            eigthteenAgo.setFullYear(eigthteenAgo.getFullYear - 18)
+            eigthteenAgo.setFullYear(eigthteenAgo.getFullYear() - 18)
 
             return date < eigthteenAgo; 
         }, {message: 'Client must be 18 years of age or older'})
@@ -23,7 +24,7 @@ const validateClient = (data) => {
     try {
         const parsedClient = ClientSchema.parse(data);
         
-        return { isValid: true, data: parsedClient};
+        return { isValid: true, data: parsedClient };
     } catch (error) {
         
         const errors = error.errors.map(err => ({
@@ -33,4 +34,4 @@ const validateClient = (data) => {
         return { isValid: false, errors };
     }
 }
-module.exports = { validateClient }
+module.exports = { validateClient };
