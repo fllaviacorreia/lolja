@@ -18,7 +18,7 @@ class ClientRepository {
             const query = `
                 INSERT INTO clients (name, email, born_date) 
                 VALUES ($1, $2, $3)    
-                RETURNING id;
+                RETURNING *;
             `;
             
             const result = await db.query(query, [
@@ -26,8 +26,8 @@ class ClientRepository {
                 validatedClient.data.email,
                 validatedClient.data.bornDate
             ]);
-            console.log('Aqui')
-            return result.rows[0].id;
+            
+            return result.rows[0];
         } catch (error) {
             console.error('Error inserting client:', error.message);
             throw error;
