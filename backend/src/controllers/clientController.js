@@ -1,7 +1,7 @@
 const ClientRepository = require("../repositories/clientRepository");
 const Client = require('../models/client');
 
-const create = async (req, res) => {
+const register = async (req, res) => {
     try {
         const { name, email, bornDate } = req.body;
         
@@ -48,6 +48,6 @@ const disable = async (req, res) => {
     }
 }
 module.exports = {
-    create,
+    register,
     disable
 }
