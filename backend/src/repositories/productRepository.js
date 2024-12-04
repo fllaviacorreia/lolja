@@ -4,12 +4,10 @@ const { validateProduct } = require('../validators/productValidator');
 class ProductRepository {
     static async save(data) {
         const db = await connectDB();
-
         try {
             const validatedProduct = validateProduct(data);
-
             if (!validatedProduct.isValid) {
-                console.error('Erro na validação:', validatedProduct.errors); 
+                console.error('Validation error:', validatedProduct.errors); 
                 throw new Error('Product data is invalid');
             }
 
@@ -17,8 +15,8 @@ class ProductRepository {
                 INSERT INTO products (name, brand, price, quantity) 
                 VALUES ($1, $2, $3, $4)    
                 RETURNING *;
-'            `;
-
+            `;
+            
             const result = await db.query(query, [
                 validatedProduct.data.name, 
                 validatedProduct.data.brand,
@@ -32,3 +30,5 @@ class ProductRepository {
         }
     }
 }
+
+module.exports = ProductRepository;
