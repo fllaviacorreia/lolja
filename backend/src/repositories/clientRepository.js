@@ -58,7 +58,7 @@ class ClientRepository {
         try {
             const validatedClient = validateClient(data);
             if (!validatedClient.isValid) {
-                console.error('Erro na validação:', validatedClient.errors); 
+                console.error('Error in validation:', validatedClient.errors); 
                 throw new Error('Client data is invalid');
             }
             
