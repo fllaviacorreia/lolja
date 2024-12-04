@@ -1,8 +1,9 @@
-const z = require("zod");
+const { z } = require("zod");
 
 const ProductSchema = z.object({
     name: z
-        .string().min(1, { message: 'Name is required' })
+        .string()
+        .min(1, { message: 'Name is required' })
         .max(50, { message: 'The name must have a maximum of 50 characters' }),
     brand: z
         .string()
@@ -10,7 +11,8 @@ const ProductSchema = z.object({
         .max(50, { message: 'The brand must have a maximum of 50 characters' }),
     price: z
         .number()
-        .positive({ message: 'Value must be greater than zero' }),
+        .positive({ message: 'Value must be greater than zero' })
+        ,
     quantity: z
         .number()   
         .int()
@@ -19,11 +21,11 @@ const ProductSchema = z.object({
 
 const validateProduct = (data) => {
     try {
-        const parsedProduct = ProductSchema.parsed(data);
-
-        return { isValid: true, data: parsedProduct.data };
+        const parsedProduct = ProductSchema.parse(data);
+        
+        return { isValid: true, data: parsedProduct };
     } catch (error) {
-
+        
         const errors = error.errors.map(err => ({
             field: err.path.join('.'),
             message: err.message
@@ -31,4 +33,5 @@ const validateProduct = (data) => {
         return { isValid: false, errors };
     }
 }
+
 module.exports = { validateProduct }
