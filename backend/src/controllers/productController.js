@@ -39,7 +39,16 @@ const disable = async (req, res) => {
     }
 }
 
+const findAllProducts = async (req, res) => {
+    try {
+        const products = await ProductRepository.findAll();
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
 module.exports = {
     register,
-    disable
+    disable,
+    findAllProducts
 }
