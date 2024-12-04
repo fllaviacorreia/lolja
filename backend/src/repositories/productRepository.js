@@ -48,6 +48,36 @@ class ProductRepository {
             throw error;
         }
     }
+
+    static async update(id, data) {
+        const db = await connectDB();
+        try {
+            const validatedProduct = validateProduct(data);
+            if (!validatedProduct.isValid) {
+                console.error('Error in validation:', validatedProduct.errors); 
+                throw new Error('Client data is invalid');
+            }
+            
+            const query = `
+                UPDATE products 
+                SET name = $1, brand = $2, price = $3, quantity = $4
+                WHERE id = $5
+                
+            `;
+            const result = await db.query(query, [
+                validatedProduct.data.name, 
+                validatedProduct.data.brand,
+                validatedProduct.data.price,
+                validatedProduct.data.quantity,
+                id
+            ]);
+            if(result.rowCount === 0) throw new Error('Id product not found');
+            return result.rows[0];
+        } catch (error) {
+            console.error('Error in the update product function:', error.message);
+            throw error;
+        }
+    }
     static async findAll() {
         const db = await connectDB();
         try {
