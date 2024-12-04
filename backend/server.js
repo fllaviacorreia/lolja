@@ -1,5 +1,5 @@
 const express = require("express");
-
+const cors = require('cors');
 const clientsRoutes = require("./src/routes/clientRoute.js");
 const productsRoutes = require('./src/routes/productRoutes.js');
 const PORT = 4000;
