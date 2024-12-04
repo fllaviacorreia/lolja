@@ -26,6 +26,20 @@ const register = async (req, res) => {
     }
 }
 
+const disable = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (isNaN(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid id'});
+        }
+        const innactiveProduct = await ProductRepository.innactive(id);
+        res.status(200).json(innactiveProduct);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
 module.exports = {
-    register
+    register,
+    disable
 }
