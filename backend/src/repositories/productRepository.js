@@ -62,6 +62,23 @@ class ProductRepository {
             throw error;
         }
     }
+    static async findById(id) {
+        const db = await connectDB();
+        try {
+            const query = `
+                SELECT * 
+                FROM products
+                WHERE id = $1;      
+            `;
+            const result = await db.query(query, [id]);
+
+            if (result.rowCount === 0) throw new Error('Product not found');
+            return result.rows[0];
+        } catch (error) {
+            console.error('Error finding product with this id:', error.message);
+            throw error;
+        }
+    }
 }
 
 module.exports = ProductRepository;
