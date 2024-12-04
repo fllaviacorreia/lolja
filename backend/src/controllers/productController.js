@@ -39,6 +39,24 @@ const disable = async (req, res) => {
     }
 }
 
+const updateProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        let { name, brand, price, quantity } = req.body;
+        if (isNaN(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid id'});
+        }
+
+        if (!name && !brand && !price && !quantity) {
+            return res.status(400).json({ error: 'At least one field needs to be provide'})
+        }
+        const updateProduct = await ProductRepository.update(id, { name, brand, price, quantity})
+        res.status(200).json(updateProduct);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
 const findAllProducts = async (req, res) => {
     try {
         const products = await ProductRepository.findAll();
@@ -65,6 +83,7 @@ const findById = async (req, res) => {
 module.exports = {
     register,
     disable,
+    updateProduct,
     findAllProducts,
     findById
 }
