@@ -6,7 +6,9 @@ const PORT = 4000;
 
 const app = express();
 app.use(express.json());
-
+app.use(cors({
+    origin: '*',
+}));
 app.use("/clients", clientsRoutes);
 app.use('/products', productsRoutes);
 
