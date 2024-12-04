@@ -48,6 +48,20 @@ class ProductRepository {
             throw error;
         }
     }
+    static async findAll() {
+        const db = await connectDB();
+        try {
+            const query = `
+                SELECT * 
+                FROM products
+            `;
+            const result = await db.query(query);
+            return result.rows;
+        } catch (error) {
+            console.error('Error in the find all products function:', error.message);
+            throw error;
+        }
+    }
 }
 
 module.exports = ProductRepository;
