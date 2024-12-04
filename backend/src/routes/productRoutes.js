@@ -5,7 +5,7 @@ const ProductRouter = express.Router();
 
 ProductRouter.post("/register", ProductController.register);
 ProductRouter.delete("/disable/:id", ProductController.disable);
-
+ProductRouter.get("/:id", ProductController.findById);
 ProductRouter.get("/", ProductController.findAllProducts);
 
 module.exports = ProductRouter;
