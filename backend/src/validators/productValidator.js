@@ -21,7 +21,7 @@ const validateProduct = (data) => {
     try {
         const parsedProduct = ProductSchema.parsed(data);
 
-        return { isValid: true, data: parsedProduct };
+        return { isValid: true, data: parsedProduct.data };
     } catch (error) {
 
         const errors = error.errors.map(err => ({
