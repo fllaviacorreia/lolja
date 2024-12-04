@@ -47,8 +47,24 @@ const findAllProducts = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 }
+
+const findById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (isNaN(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid id'});
+        }
+
+        const product = await ProductRepository.findById(id);
+        res.status(200).json(product);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
 module.exports = {
     register,
     disable,
-    findAllProducts
+    findAllProducts,
+    findById
 }
