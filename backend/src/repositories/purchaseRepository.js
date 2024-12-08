@@ -70,6 +70,24 @@ class PurchaseRepository{
             throw error;
         }
     }
+
+    static async cancelPurchase(id_purchase) {
+        const db = await connectDB();
+        try {
+            const query = `
+                UPDATE purchases
+                SET status = 'canceled'
+                WHERE id = $1
+                RETURNING *;
+            `;
+            const result = await db.query(query, [id_purchase]);
+            if (result.rowCount === 0) throw new Error('Purchase not found');
+            return result.rows[0];
+        } catch (error) {
+            console.error('Error finding purchase with this id:', error.message);
+            throw error;
+        }
+    }
 }
 
 module.exports = PurchaseRepository;
