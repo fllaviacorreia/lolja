@@ -1,6 +1,6 @@
 const connectDB = require('../config/db');
 const { validatePurchase } = require('../validators/purchaseValidator');
-const PurchaseService = require('../service/purchaseService');
+const PurchaseService = require('../services/purchaseService');
 
 class PurchaseRepository{
 
