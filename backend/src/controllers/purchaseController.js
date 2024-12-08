@@ -41,5 +41,19 @@ class PurchaseController {
             res.status(400).json({ error: error.message });
         }
     }
+
+    static async cancelPurchase(req, res) {
+        try {
+            const { id } = req.params;
+            if (isNaN(parseInt(id))) {
+                return res.status(400).json({ error: 'Invalid id'});
+            }
+            const cancelPurchase = await PurchaseRepository.cancelPurchase(id);
+            res.status(200).json(cancelPurchase); 
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
+    
 }
 module.exports = PurchaseController;
