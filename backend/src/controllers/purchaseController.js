@@ -31,5 +31,15 @@ class PurchaseController {
             res.status(400).json({ error: error.message });
         }
     }
+
+    static async findPurchaseById(req, res) {
+        try {
+            const { id } = req.params;
+            const purchase = await PurchaseRepository.findById(id);
+            res.status(200).json(purchase);
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
 }
 module.exports = PurchaseController;
