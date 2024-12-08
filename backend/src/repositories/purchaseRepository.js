@@ -39,7 +39,20 @@ class PurchaseRepository{
             throw error;
         }
     }
-
+    static async findAll() {
+        const db = await connectDB();
+        try {
+            const query = `
+                SELECT * 
+                FROM purchases
+            `;
+            const result = await db.query(query);
+            return result.rows;
+        } catch (error) {
+            console.error('Error in the find all purchases function:', error.message);
+            throw error;
+        }
+    }
 }
 
 module.exports = PurchaseRepository;
