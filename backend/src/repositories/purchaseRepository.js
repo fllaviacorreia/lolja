@@ -53,6 +53,23 @@ class PurchaseRepository{
             throw error;
         }
     }
+
+    static async findById(id_purchase) {
+        const db = await connectDB();
+        try {
+            const query = `
+                SELECT * FROM purchases
+                WHERE id = $1;      
+            `;
+            const result = await db.query(query, [id_purchase]);
+
+            if (result.rowCount === 0) throw new Error('Purchase not found');
+            return result.rows[0];
+        } catch (error) {
+            console.error('Error finding purchase with this id:', error.message);
+            throw error;
+        }
+    }
 }
 
 module.exports = PurchaseRepository;
