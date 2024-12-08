@@ -20,12 +20,12 @@ CREATE TABLE IF NOT EXISTS clients (
 );
 
 CREATE TABLE IF NOT EXISTS purchases (
+    id SERIAL PRIMARY KEY,
     id_product INT NOT NULL,
     id_client INT NOT NULL,
     total NUMERIC(10, 2), 
     status status_purchase NOT NULL DEFAULT 'finished',
 
-    PRIMARY KEY (id_product, id_client),
     FOREIGN KEY (id_product) REFERENCES products (id),
     FOREIGN KEY (id_client) REFERENCES clients (id) 
 )
