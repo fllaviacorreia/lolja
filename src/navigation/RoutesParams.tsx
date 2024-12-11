@@ -5,5 +5,7 @@ export type RoutesParams = {
     ProductList: undefined;
     AddProduct: undefined;
     UpdateProduct: { product: any; onProductUpdated: (updatedProduct: any) => void };
+    PurchasesList: undefined; 
+    AddPurchase: undefined;
   };
   

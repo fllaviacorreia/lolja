@@ -37,7 +37,7 @@ export default function UpdateProduct() {
       if (!response.ok) throw new Error('Erro ao atualizar produto.');
 
       Alert.alert('Sucesso', 'Produto atualizado com sucesso.');
-      navigation.goBack(); // Retorna à lista
+      navigation.goBack(); 
     } catch (error) {
       console.error(error);
       Alert.alert('Erro', 'Não foi possível atualizar o produto.');

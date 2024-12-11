@@ -5,7 +5,7 @@ import { RouteProp } from '@react-navigation/native';
 import { RoutesParams } from '../../navigation/RoutesParams';
 import styles from './styles';
 
-const BASE_URL = 'http://192.168.1.3:4000'; // Certifique-se de que o endpoint está correto.
+const BASE_URL = 'http://192.168.1.3:4000'; 
 
 type UpdateClientScreenProp = StackNavigationProp<RoutesParams, 'UpdateClient'>;
 type UpdateClientRouteProp = RouteProp<RoutesParams, 'UpdateClient'>;
@@ -40,20 +40,19 @@ export default function UpdateClient({ navigation, route }: UpdateClientProps) {
     try {
       setLoading(true);
 
-      // Construção correta da URL com endpoint correto.
+      
       const response = await fetch(`${BASE_URL}/clients/update/${client.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name,
           email,
-          bornDate: birthDate, // Certifique-se de que está no formato correto (YYYY-MM-DD).
+          bornDate: birthDate, 
         }),
       });
       console.log({ name, email, bornDate: birthDate });
 
       if (!response.ok) {
-        // Extrai a mensagem de erro do servidor, se disponível.
         const errorData = await response.json();
         throw new Error(errorData.error || 'Erro ao atualizar o cliente.');
       }

@@ -1,4 +1,3 @@
-// src/screens/UpdateClient/styles.tsx
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({

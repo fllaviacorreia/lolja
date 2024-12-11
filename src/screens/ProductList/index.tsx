@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useFocusEffect } from '@react-navigation/native';
-import styles from './styles'; // Crie um arquivo de estilos similar ao de clientes
-import ProductCard from '../../components/ProductCard'; // Componente que representa um cartão de produto
+import styles from './styles'; 
+import ProductCard from '../../components/ProductCard'; 
 import { RoutesParams } from '../../navigation/RoutesParams';
 
 // URL base do servidor
