@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Alert, Platform } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RoutesParams } from '../../navigation/RoutesParams';
+import { useFocusEffect } from '@react-navigation/native';
 import styles from './styles';
 import ClientCard from '../../components/ClientCard';
 
-
-const BASE_URL = Platform.OS === 'android' ? 'http://192.168.1.4:4000' : 'http://localhost:4000';
+// Define a URL base para o seu servidor local
+const BASE_URL = 'http://192.168.1.3:4000';
 
 type ClientListScreenProp = StackNavigationProp<RoutesParams, 'ClientList'>;
 
@@ -29,23 +30,37 @@ export default function ClientList({ navigation }: { navigation: ClientListScree
     }
   };
 
-  const handleDelete = async (id: string) => {
+  // Atualizar lista ao focar na tela
+  useFocusEffect(
+    useCallback(() => {
+      fetchClients();
+    }, [])
+  );
+
+  const handleDisable = async (id: string) => {
     try {
-      const response = await fetch(`${BASE_URL}/clients/${id}`, {
+      const response = await fetch(`${BASE_URL}/clients/disable/${id}`, {
         method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'innactive' }),
       });
-      if (!response.ok) throw new Error('Erro ao deletar cliente');
-      Alert.alert('Sucesso', 'Cliente deletado com sucesso.');
-      setClients((prevClients) => prevClients.filter((client) => client.id !== id));
+
+      if (!response.ok) {
+        throw new Error('Erro ao inativar o cliente');
+      }
+
+      Alert.alert('Sucesso', 'Cliente inativado com sucesso.');
+      console.log('Cliente inativado com sucesso.');
+      setClients(prevClients =>
+        prevClients.map(client =>
+          client.id === id ? { ...client, status: 'innactive' } : client
+        )
+      );
     } catch (error) {
-      console.error('Erro ao deletar cliente:', error);
-      Alert.alert('Erro', 'Não foi possível deletar o cliente.');
+      console.error(error);
+      Alert.alert('Erro', error.message);
     }
   };
-
-  useEffect(() => {
-    fetchClients();
-  }, []);
 
   if (loading) {
     return (
@@ -60,14 +75,27 @@ export default function ClientList({ navigation }: { navigation: ClientListScree
       <Text style={styles.title}>Lista de Clientes</Text>
       <FlatList
         data={clients}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <ClientCard
             name={item.name}
             email={item.email}
-            date={item.date}
-            onEdit={() => navigation.navigate('AddClient', { client: item })}
-            onDelete={() => handleDelete(item.id)}
+            date={item.bornDate}
+            status={item.status}
+            onEdit={() =>
+              navigation.navigate('UpdateClient', {
+                client: item,
+                onClientUpdated: (updatedClient) => {
+                  // Atualizar cliente localmente
+                  setClients((prevClients) =>
+                    prevClients.map((client) =>
+                      client.id === updatedClient.id ? updatedClient : client
+                    )
+                  );
+                },
+              })
+            }
+            onDisable={() => handleDisable(item.id)}
           />
         )}
       />

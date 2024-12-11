@@ -11,6 +11,8 @@ export default StyleSheet.create({
     borderRadius: 8,
     borderColor: '#ccc',
   },
+
+  inactiveCard: { backgroundColor: '#d3d3d3', borderColor: '#999' },
   name: {
     fontSize: 18,
     fontWeight: 'bold',

@@ -5,21 +5,23 @@ import { RouteProp } from '@react-navigation/native';
 import { RoutesParams } from '../../navigation/RoutesParams';
 import styles from './styles';
 
-type AddClientScreenProp = StackNavigationProp<RoutesParams, 'AddClient'>;
-type AddClientRouteProp = RouteProp<RoutesParams, 'AddClient'>;
+const BASE_URL = 'http://192.168.1.3:4000'; // Certifique-se de que o endpoint está correto.
 
-interface AddClientProps {
-  navigation: AddClientScreenProp;
-  route: AddClientRouteProp;
+type UpdateClientScreenProp = StackNavigationProp<RoutesParams, 'UpdateClient'>;
+type UpdateClientRouteProp = RouteProp<RoutesParams, 'UpdateClient'>;
+
+interface UpdateClientProps {
+  navigation: UpdateClientScreenProp;
+  route: UpdateClientRouteProp;
 }
 
-export default function AddClient({ navigation, route }: AddClientProps) {
+export default function UpdateClient({ navigation, route }: UpdateClientProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [loading, setLoading] = useState(false);
+
   const client = route.params?.client;
-  const onSave = route.params?.onSave;
 
   useEffect(() => {
     if (client) {
@@ -29,53 +31,38 @@ export default function AddClient({ navigation, route }: AddClientProps) {
     }
   }, [client]);
 
-  const handleSave = async () => {
+  const handleUpdate = async () => {
     if (!name || !email || !birthDate) {
       Alert.alert('Erro', 'Todos os campos são obrigatórios.');
-      return;
-    }
-
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(birthDate)) {
-      Alert.alert('Erro', 'A data de nascimento deve estar no formato YYYY-MM-DD.');
       return;
     }
 
     try {
       setLoading(true);
 
-      const url = client
-        ? `http://192.168.1.3:4000/clients/${client.id}`
-        : `http://192.168.1.3:4000/clients/register`; // Rota correta para adicionar cliente
-
-      const method = client ? 'PUT' : 'POST';
-      const body = JSON.stringify({ name, email, bornDate: birthDate });
-
-      const response = await fetch(url, {
-        method,
+      // Construção correta da URL com endpoint correto.
+      const response = await fetch(`${BASE_URL}/clients/update/${client.id}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body,
+        body: JSON.stringify({
+          name,
+          email,
+          bornDate: birthDate, // Certifique-se de que está no formato correto (YYYY-MM-DD).
+        }),
       });
+      console.log({ name, email, bornDate: birthDate });
 
       if (!response.ok) {
+        // Extrai a mensagem de erro do servidor, se disponível.
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Erro desconhecido');
+        throw new Error(errorData.error || 'Erro ao atualizar o cliente.');
       }
 
-      const responseData = await response.json();
-      Alert.alert(
-        'Sucesso',
-        client ? 'Cliente atualizado com sucesso!' : 'Cliente adicionado com sucesso!'
-      );
-
-      if (typeof onSave === 'function') {
-        onSave(responseData);
-      }
-
+      Alert.alert('Sucesso', 'Cliente atualizado com sucesso.');
       navigation.goBack();
-    } catch (error) {
-      console.error('Erro ao salvar cliente:', error.message);
-      Alert.alert('Erro', error.message);
+    } catch (error: any) {
+      console.error(error);
+      Alert.alert('Erro', error.message || 'Erro desconhecido.');
     } finally {
       setLoading(false);
     }
@@ -83,7 +70,7 @@ export default function AddClient({ navigation, route }: AddClientProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{client ? 'Editar Cliente' : 'Adicionar Cliente'}</Text>
+      <Text style={styles.title}>Editar Cliente</Text>
 
       <TextInput
         style={styles.input}
@@ -91,6 +78,7 @@ export default function AddClient({ navigation, route }: AddClientProps) {
         value={name}
         onChangeText={setName}
       />
+
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -98,6 +86,7 @@ export default function AddClient({ navigation, route }: AddClientProps) {
         onChangeText={setEmail}
         keyboardType="email-address"
       />
+
       <TextInput
         style={styles.input}
         placeholder="Data de nascimento (YYYY-MM-DD)"
@@ -108,11 +97,12 @@ export default function AddClient({ navigation, route }: AddClientProps) {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.saveButton, loading && { opacity: 0.5 }]}
-          onPress={handleSave}
+          onPress={handleUpdate}
           disabled={loading}
         >
           <Text style={styles.buttonText}>Salvar</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           style={[styles.cancelButton, loading && { opacity: 0.5 }]}
           onPress={() => navigation.goBack()}

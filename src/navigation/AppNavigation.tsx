@@ -4,7 +4,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import ClientList from '../screens/ClientList';
 import AddClient from '../screens/AddClient';
 import Purchases from '../screens/Purchases';
-import Products from '../screens/Products';
+import ProductList from '../screens/ProductList'; // Importando ProductList
+import AddProduct from '../screens/AddProduct'; // Importando AddProduct
+import UpdateProduct from '../screens/UpdateProduct'; // Importando UpdateProduct
+import UpdateClient from '../screens/UpdateClient';
 import { Feather } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -16,10 +19,20 @@ function ClientStack() {
     <Stack.Navigator>
       <Stack.Screen name="ListaClientes" component={ClientList} options={{ headerShown: false }} />
       <Stack.Screen name="AddClient" component={AddClient} options={{ title: 'Adicionar Cliente' }} />
+      <Stack.Screen name="UpdateClient" component={UpdateClient} options={{ title: 'Atualizar Cliente' }} />
     </Stack.Navigator>
   );
 }
 
+function ProductStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="ProductList" component={ProductList} options={{ title: 'Lista de Produtos', headerShown: false }} />
+      <Stack.Screen name="AddProduct" component={AddProduct} options={{ title: 'Adicionar Produto' }} />
+      <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{ title: 'Atualizar Produto' }} />
+    </Stack.Navigator>
+  );
+}
 
 export default function AppNavigator() {
   return (
@@ -43,13 +56,10 @@ export default function AppNavigator() {
           tabBarInactiveTintColor: 'gray',
         })}
       >
-         <Tab.Screen name="Clientes" component={ClientStack} options={{ headerShown: false }} />
-
+        <Tab.Screen name="Clientes" component={ClientStack} options={{ headerShown: false }} />
         <Tab.Screen name="Compras" component={Purchases} />
-        <Tab.Screen name="Produtos" component={Products} />
+        <Tab.Screen name="Produtos" component={ProductStack} options={{ headerShown: false }} />
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
-
-
