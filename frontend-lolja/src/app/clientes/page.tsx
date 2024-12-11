@@ -40,7 +40,8 @@ export default function Cliente() {
 
   const [clientToDelete, setClientToDelete] = useState<number | null>(null);
 
-  
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const { data: clients, error } = useSWR<Client[]>('http://localhost:4000/clients', fetcher);
 
   function handleOpenFirstModal() {
@@ -72,8 +73,9 @@ export default function Cliente() {
       setNewEmail("");
       setNewBornDate("");
       setFirstModalIsOpen(false);
+
     } catch (error) {
-      console.error("Erro ao adicionar cliente:", error);
+      console.error("Erro ao atualizar cliente:", error);
     }
   };
 
@@ -234,7 +236,7 @@ export default function Cliente() {
                 onChange={(e) => setNewBornDate(e.target.value)}
                 required
               />
-              <button type="submit" className="bg-emerald-800 text-white rounded-lg p-2">
+              <button type="submit" className="bg-cl4 text-white rounded-lg p-2">
                 Adicionar Cliente
               </button>
             </form>
